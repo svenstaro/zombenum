@@ -1,0 +1,8 @@
+[package]
+name = "zombenum"
+version = "0.1.0"
+authors = ["Sven-Hendrik Haase <svenstaro@gmail.com>"]
+
+[dependencies]
+specs = "0.9.1"
+ggez = "0.3.1"
