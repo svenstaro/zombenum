@@ -21,3 +21,15 @@ pub struct Velocity {
 impl Component for Velocity {
     type Storage = BTreeStorage<Self>;
 }
+
+
+#[derive(Debug)]
+pub enum Label {
+    Zombie,
+    Survivor,
+    Misc,
+}
+
+impl Component for Label {
+    type Storage = BTreeStorage<Self>;
+}
