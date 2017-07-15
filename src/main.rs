@@ -8,7 +8,7 @@ mod zombie;
 
 use specs::{World, RunNow};
 
-use components::{Position, Velocity, Label};
+use components::common::{Position, Velocity, Label};
 use systems::{Movement, Printer};
 
 

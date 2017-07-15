@@ -1,5 +1,5 @@
 use specs::World;
-use components::{Position, Velocity, Label};
+use components::common::{Position, Velocity, Label};
 
 pub struct SurvivorSpec {
     pub label: Label,
@@ -19,8 +19,8 @@ impl SurvivorSpec {
     pub fn default() -> SurvivorSpec {
         SurvivorSpec {
             label: Label::Survivor,
-            pos: Position { x: 0.0, y: 0.0 },
-            vel: Velocity { x: 0.0, y: 0.0 },
+            pos: Position { x: 0.0, y: 0.0, z: 0.0 },
+            vel: Velocity { x: 0.0, y: 0.0, z: 0.0 },
         }
     }
 }

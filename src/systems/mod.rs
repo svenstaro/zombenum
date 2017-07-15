@@ -1,5 +1,5 @@
 use specs::{System, ReadStorage, WriteStorage};
-use components::{Position, Velocity, Label};
+use components::common::{Position, Velocity, Label};
 
 
 pub struct Movement;
@@ -29,7 +29,7 @@ impl<'a> System<'a> for Printer {
         use specs::Join;
 
         for (label, pos) in (&label, &pos).join() {
-            println!("Entity with label {:?} at position {:?};", label, pos);
+            println!("Entity with label {:?} at {:?};", label, pos);
         }
     }
 }

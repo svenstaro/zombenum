@@ -1,5 +1,5 @@
 use specs::World;
-use components::{Position, Velocity, Label};
+use components::common::{Position, Velocity, Label};
 
 pub struct ZombieSpec {
     pub label: Label,
@@ -19,8 +19,8 @@ impl ZombieSpec {
     pub fn default() -> ZombieSpec {
         ZombieSpec {
             label: Label::Zombie,
-            pos: Position { x: 0.0, y: 0.0 },
-            vel: Velocity { x: 0.0, y: 0.0 },
+            pos: Position { x: 0.0, y: 0.0, z: 0.0 },
+            vel: Velocity { x: 0.0, y: 0.0, z: 0.0 },
         }
     }
 }
