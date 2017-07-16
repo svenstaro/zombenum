@@ -1,5 +1,6 @@
 use specs::{System, ReadStorage, WriteStorage};
-use components::common::{Position, Velocity, Label};
+use components::common::{Position, Velocity};
+use components::living::Intelligence;
 
 
 pub struct Movement;
@@ -22,14 +23,19 @@ impl<'a> System<'a> for Movement {
 pub struct Printer;
 
 impl<'a> System<'a> for Printer {
-    type SystemData = (ReadStorage<'a, Label>,
+    type SystemData = (ReadStorage<'a, Intelligence>,
                        ReadStorage<'a, Position>);
 
-    fn run(&mut self, (label, pos): Self::SystemData) {
+    fn run(&mut self, (int, pos): Self::SystemData) {
         use specs::Join;
 
-        for (label, pos) in (&label, &pos).join() {
-            println!("Entity with label {:?} at {:?};", label, pos);
+        for (int, pos) in (&int, &pos).join() {
+            let label = match int.iq > 80 {
+                true => "survivor",
+                false => "zombie",
+            };
+
+            println!("{} entity at {:?};", label, pos);
         }
     }
 }

@@ -18,6 +18,17 @@ impl Component for Position {
     type Storage = BTreeStorage<Self>;
 }
 
+impl Default for Position {
+    fn default() -> Position {
+        // TODO: randomize?
+        Position {
+            x: 0.0,
+            y: 0.0,
+            z: 0.0,
+        }
+    }
+}
+
 
 /// Almost anything can have a velocity.
 ///
@@ -34,15 +45,12 @@ impl Component for Velocity {
     type Storage = BTreeStorage<Self>;
 }
 
-
-/// Something to label entities with.
-#[derive(Debug)]
-pub enum Label {
-    Zombie,
-    Survivor,
-    Misc,
-}
-
-impl Component for Label {
-    type Storage = BTreeStorage<Self>;
+impl Default for Velocity {
+    fn default() -> Velocity {
+        Velocity {
+            x: 0.0,
+            y: 0.0,
+            z: 0.0,
+        }
+    }
 }

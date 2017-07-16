@@ -1,40 +1,53 @@
 use specs::World;
-use components::common::{Position, Velocity, Label};
+use components::common::*;
+use components::living::*;
 
+
+#[derive(Default)]
 pub struct SurvivorSpec {
-    pub label: Label,
-    pub pos: Position,
-    pub vel: Velocity,
+    pos: Position,
+    vel: Velocity,
+    health: Health,
+    agility: Agility,
+    intelligence: Intelligence,
+    nourishment: Nourishment,
+    hunger: Hunger,
+    thirst: Thirst,
 }
 
 impl SurvivorSpec {
-    pub fn new(pos: Position, vel: Velocity) -> SurvivorSpec {
+    pub fn new(pos: Position,
+               vel: Velocity,
+               health: Health,
+               agility: Agility,
+               intelligence: Intelligence,
+               nourishment: Nourishment,
+               hunger: Hunger,
+               thirst: Thirst
+               ) -> SurvivorSpec {
         SurvivorSpec {
-            label: Label::Survivor,
             pos: pos,
             vel: vel,
-        }
-    }
-
-    pub fn default() -> SurvivorSpec {
-        SurvivorSpec {
-            label: Label::Survivor,
-            pos: Position { x: 0.0, y: 0.0, z: 0.0 },
-            vel: Velocity { x: 0.0, y: 0.0, z: 0.0 },
+            health: health,
+            agility: agility,
+            intelligence: intelligence,
+            nourishment: nourishment,
+            hunger: hunger,
+            thirst: thirst,
         }
     }
 }
 
 pub fn add_survivor(world: &mut World, survivor: Option<SurvivorSpec>) {
-    let spec = match survivor {
-        None => SurvivorSpec::default(),
+    let spec: SurvivorSpec = match survivor {
+        None => Default::default(),
         Some(s) => s,
     };
 
     world
         .create_entity()
-        .with(spec.label)
         .with(spec.pos)
         .with(spec.vel)
+        .with(spec.intelligence)
         .build();
 }

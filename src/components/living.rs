@@ -16,17 +16,54 @@ impl Component for Health {
     type Storage = BTreeStorage<Self>;
 }
 
+impl Default for Health {
+    fn default() -> Health {
+        Health {
+            amount: 100,
+        }
+    }
+}
+
 
 /// Various physical attributes
 /// TODO: is Agility a good name?
 #[derive(Debug)]
 pub struct Agility {
-    pub max_speed: Velocity,
+    pub max_speed: f32,
     pub max_strength: u8,
 }
 
 impl Component for Agility {
     type Storage = BTreeStorage<Self>;
+}
+
+impl Default for Agility {
+    fn default() -> Agility {
+        Agility {
+            max_speed: 10.0,
+            max_strength: 100,
+        }
+    }
+}
+
+
+/// Intelligence as described by an IQ.
+/// The average IQ is 100. That of Zombies should be much lower.
+#[derive(Debug)]
+pub struct Intelligence {
+    pub iq: u8,
+}
+
+impl Component for Intelligence {
+    type Storage = BTreeStorage<Self>;
+}
+
+impl Default for Intelligence {
+    fn default() -> Intelligence {
+        Intelligence {
+            iq: 100,
+        }
+    }
 }
 
 
@@ -43,6 +80,16 @@ impl Component for Nourishment {
     type Storage = BTreeStorage<Self>;
 }
 
+impl Default for Nourishment {
+    fn default() -> Nourishment {
+        Nourishment {
+            solids: 50,
+            liquids: 50,
+            energy: 50,
+        }
+    }
+}
+
 
 /// Hunger influences behavior. Should be dependent on Nourishment levels.
 #[derive(Debug)]
@@ -54,6 +101,14 @@ impl Component for Hunger {
     type Storage = BTreeStorage<Self>;
 }
 
+impl Default for Hunger {
+    fn default() -> Hunger {
+        Hunger {
+            level: 10,
+        }
+    }
+}
+
 
 /// Like hunger, but for liquids. Zombies don't feel Thist (?).
 #[derive(Debug)]
@@ -63,4 +118,12 @@ pub struct Thirst {
 
 impl Component for Thirst {
     type Storage = BTreeStorage<Self>;
+}
+
+impl Default for Thirst {
+    fn default() -> Thirst {
+        Thirst {
+            level: 10,
+        }
+    }
 }

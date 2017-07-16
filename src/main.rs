@@ -8,7 +8,8 @@ mod zombie;
 
 use specs::{World, RunNow};
 
-use components::common::{Position, Velocity, Label};
+use components::common::{Position, Velocity};
+use components::living::*;
 use systems::{Movement, Printer};
 
 
@@ -16,7 +17,7 @@ fn main() {
     let mut world = World::new();
     world.register::<Position>();
     world.register::<Velocity>();
-    world.register::<Label>();
+    world.register::<Intelligence>();
 
     survivor::add_survivor(&mut world, None);
     zombie::add_zombie(&mut world, None);

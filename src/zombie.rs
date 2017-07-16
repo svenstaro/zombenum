@@ -1,40 +1,63 @@
 use specs::World;
-use components::common::{Position, Velocity, Label};
+use components::common::*;
+use components::living::*;
 
 pub struct ZombieSpec {
-    pub label: Label,
-    pub pos: Position,
-    pub vel: Velocity,
+    pos: Position,
+    vel: Velocity,
+    health: Health,
+    agility: Agility,
+    intelligence: Intelligence,
+    nourishment: Nourishment,
+    hunger: Hunger,
 }
 
 impl ZombieSpec {
-    pub fn new(pos: Position, vel: Velocity) -> ZombieSpec {
+    pub fn new(pos: Position,
+               vel: Velocity,
+               health: Health,
+               agility: Agility,
+               intelligence: Intelligence,
+               nourishment: Nourishment,
+               hunger: Hunger,
+              ) -> ZombieSpec {
         ZombieSpec {
-            label: Label::Zombie,
             pos: pos,
             vel: vel,
-        }
-    }
-
-    pub fn default() -> ZombieSpec {
-        ZombieSpec {
-            label: Label::Zombie,
-            pos: Position { x: 0.0, y: 0.0, z: 0.0 },
-            vel: Velocity { x: 0.0, y: 0.0, z: 0.0 },
+            health: health,
+            agility: agility,
+            intelligence: intelligence,
+            nourishment: nourishment,
+            hunger: hunger,
         }
     }
 }
 
+impl Default for ZombieSpec {
+    fn default() -> ZombieSpec {
+        ZombieSpec {
+            pos: Default::default(),
+            vel: Default::default(),
+            health: Health { amount: 120 },
+            agility: Agility { max_speed: 8.0, max_strength: 120 },
+            intelligence: Intelligence { iq: 50 },
+            nourishment: Nourishment { solids: 80, liquids: 80, energy: 80 },
+            hunger: Hunger { level: 20 },
+        }
+    }
+}
+
+
 pub fn add_zombie(world: &mut World, survivor: Option<ZombieSpec>) {
-    let spec = match survivor {
-        None => ZombieSpec::default(),
+    let spec: ZombieSpec = match survivor {
+        None => Default::default(),
         Some(s) => s,
     };
 
     world
         .create_entity()
-        .with(spec.label)
         .with(spec.pos)
         .with(spec.vel)
+        .with(spec.intelligence)
         .build();
 }
