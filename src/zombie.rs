@@ -19,8 +19,8 @@ impl ZombieSpec {
                agility: Agility,
                intelligence: Intelligence,
                nourishment: Nourishment,
-               hunger: Hunger,
-              ) -> ZombieSpec {
+               hunger: Hunger
+               ) -> ZombieSpec {
         ZombieSpec {
             pos: pos,
             vel: vel,
