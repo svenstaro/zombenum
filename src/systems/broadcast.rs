@@ -19,6 +19,9 @@ impl<'a> System <'a> for TcpBroadcast {
         let listener = TcpListener::bind("127.0.0.1:8008")
             .expect("couldn't bind to adress!");
 
+        // listener.set_nonblocking(true)
+        //     .expect("Cannot set non-blocking!");
+
         let mut stream = match listener.accept() {
             Ok((_stream, _addr)) => _stream,
             Err(e) => panic!(format!("couldn't accept: {:?}", e)),

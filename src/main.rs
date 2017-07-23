@@ -8,7 +8,7 @@ mod systems;
 mod survivor;
 mod zombie;
 
-use specs::{World, RunNow};
+use specs::{World, RunNow, DispatcherBuilder};
 
 use components::common::{Position, Velocity};
 use components::living::*;
@@ -25,12 +25,11 @@ fn main() {
     survivor::add_survivor(&mut world, None);
     zombie::add_zombie(&mut world, None);
 
-    let mut movement = Movement;
-    movement.run_now(&world.res);
+    let mut dispatcher = DispatcherBuilder::new()
+        .add(Movement, "movement", &[])
+        .add(Printer, "printer", &[])
+        .add(TcpBroadcast, "tcp_broadcast", &[])
+        .build();
 
-    let mut printer = Printer;
-    printer.run_now(&world.res);
-
-    let mut tcp_broadcast = TcpBroadcast;
-    tcp_broadcast.run_now(&world.res);
+    dispatcher.dispatch(&mut world.res);
 }
