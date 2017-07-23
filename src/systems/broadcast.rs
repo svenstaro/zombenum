@@ -16,28 +16,39 @@ impl<'a> System <'a> for TcpBroadcast {
     fn run(&mut self, pos: Self::SystemData) {
         use specs::Join;
 
+        // bind a tcp listener to localhost:8080
         let listener = TcpListener::bind("127.0.0.1:8008")
-            .expect("couldn't bind to adress!");
+            .expect("couldn't bind to address!");
 
+        // we don't seem to need non-blocking execution
         // listener.set_nonblocking(true)
         //     .expect("Cannot set non-blocking!");
 
-        let mut stream = match listener.accept() {
-            Ok((_stream, _addr)) => _stream,
-            Err(e) => panic!(format!("couldn't accept: {:?}", e)),
-        };
+        // iterate over incoming connections
+        for incoming in listener.incoming() {
+            // `incoming` can be a tcp stream, or an error
+            // if there is no incoming connection.
+            // If we get an error, we keep trying until something
+            // connects.
+            let mut stream = match incoming {
+                Ok(s) => s,
+                Err(_) => continue,
+            };
 
-        for pos in (&pos).join() {
-            let p = json!({
-                "type": "entity", // TODO
-                "x": pos.x,
-                "y": pos.y,
-                "z": pos.z,
-            });
+            // write some json to the stream
+            for pos in (&pos).join() {
+                let p = json!({
+                    "type": "entity", // TODO
+                    "x": pos.x,
+                    "y": pos.y,
+                    "z": pos.z,
+                });
 
-            let _ = stream.write(
-                &format!("{:?}", p.to_string()).as_bytes()
-                );
+                let _ = stream.write(
+                    &format!("{:?}", p.to_string()).as_bytes()
+                    );
+            }
+
         }
     }
 }
