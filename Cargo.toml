@@ -6,3 +6,4 @@ authors = ["Sven-Hendrik Haase <svenstaro@gmail.com>"]
 [dependencies]
 specs = "0.9.1"
 ggez = "0.3.1"
+serde_json = "1.0"

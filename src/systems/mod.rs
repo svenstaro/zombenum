@@ -3,6 +3,9 @@ use components::common::{Position, Velocity};
 use components::living::Intelligence;
 
 
+pub mod broadcast;
+
+
 pub struct Movement;
 
 impl<'a> System<'a> for Movement {
