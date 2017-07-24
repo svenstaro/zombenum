@@ -16,7 +16,7 @@ use specs::{World, RunNow, DispatcherBuilder};
 use components::common::{Position, Velocity};
 use components::living::*;
 
-use systems::{Movement, Printer};
+use systems::{Movement, Printer, ZombieSpawner};
 use systems::broadcast::TcpBroadcast;
 
 
@@ -38,6 +38,7 @@ fn main() {
     let mut dispatcher = DispatcherBuilder::new()
         .add(Movement, "movement", &[])
         .add(Printer, "printer", &[])
+        .add(ZombieSpawner, "zombie_spawner", &[])
         .add(TcpBroadcast, "tcp_broadcast", &[])
         .build();
 
@@ -45,5 +46,5 @@ fn main() {
 
     dispatcher.dispatch(&mut world.res);
 
-    info!("simulation commencing...");
+    info!("simulation shutting down...");
 }

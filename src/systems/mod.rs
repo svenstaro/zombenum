@@ -1,4 +1,4 @@
-use specs::{System, ReadStorage, WriteStorage};
+use specs::{Entities, System, ReadStorage, WriteStorage};
 use components::common::{Position, Velocity};
 use components::living::Intelligence;
 
@@ -40,5 +40,24 @@ impl<'a> System<'a> for Printer {
 
             println!("{} entity at {:?};", label, pos);
         }
+    }
+}
+
+
+pub struct ZombieSpawner;
+
+impl<'a> System<'a> for ZombieSpawner {
+    type SystemData = (Entities<'a>,
+                       WriteStorage<'a, Position>,
+                       WriteStorage<'a, Velocity>,
+                       WriteStorage<'a, Intelligence>);
+
+    fn run(&mut self, (ents, mut pos, mut vel, mut int): Self::SystemData) {
+        let new_zombie = ents.create();
+        pos.insert(new_zombie, Position::default());
+        vel.insert(new_zombie, Velocity::default());
+        int.insert(new_zombie, Intelligence { iq: 50 });
+
+        info!("zombie created!");
     }
 }
