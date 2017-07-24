@@ -1,6 +1,12 @@
-use specs::{Entities, System, ReadStorage, WriteStorage};
+use specs::Entities;
+use specs::Fetch;
+use specs::LazyUpdate;
+use specs::System;
+use specs::ReadStorage;
+use specs::WriteStorage;
 use components::common::{Position, Velocity};
 use components::living::Intelligence;
+use zombie;
 
 
 pub mod broadcast;
@@ -48,16 +54,10 @@ pub struct ZombieSpawner;
 
 impl<'a> System<'a> for ZombieSpawner {
     type SystemData = (Entities<'a>,
-                       WriteStorage<'a, Position>,
-                       WriteStorage<'a, Velocity>,
-                       WriteStorage<'a, Intelligence>);
+                       Fetch<'a, LazyUpdate>);
 
-    fn run(&mut self, (ents, mut pos, mut vel, mut int): Self::SystemData) {
-        let new_zombie = ents.create();
-        pos.insert(new_zombie, Position::default());
-        vel.insert(new_zombie, Velocity::default());
-        int.insert(new_zombie, Intelligence { iq: 50 });
-
-        info!("zombie created!");
+    fn run(&mut self, (ent, lazy): Self::SystemData) {
+        zombie::spawn_zombie(ent.create(), &lazy, None);
+        info!("zombie spawned!");
     }
 }

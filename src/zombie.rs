@@ -1,3 +1,5 @@
+use specs::Entity;
+use specs::LazyUpdate;
 use specs::World;
 use components::common::*;
 use components::living::*;
@@ -48,8 +50,8 @@ impl Default for ZombieSpec {
 }
 
 
-pub fn add_zombie(world: &mut World, survivor: Option<ZombieSpec>) {
-    let spec: ZombieSpec = match survivor {
+pub fn add_zombie(world: &mut World, zombie: Option<ZombieSpec>) {
+    let spec: ZombieSpec = match zombie {
         None => Default::default(),
         Some(s) => s,
     };
@@ -62,4 +64,17 @@ pub fn add_zombie(world: &mut World, survivor: Option<ZombieSpec>) {
         .build();
 
     trace!("zombie entity created!");
+}
+
+pub fn spawn_zombie(entity: Entity,
+                     lazy: &LazyUpdate,
+                     zombie: Option<ZombieSpec>) {
+    let spec: ZombieSpec = match zombie {
+        None => Default::default(),
+        Some(s) => s,
+    };
+
+    lazy.insert(entity, spec.pos);
+    lazy.insert(entity, spec.vel);
+    lazy.insert(entity, spec.intelligence);
 }

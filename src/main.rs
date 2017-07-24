@@ -39,12 +39,13 @@ fn main() {
         .add(Movement, "movement", &[])
         .add(Printer, "printer", &[])
         .add(ZombieSpawner, "zombie_spawner", &[])
-        .add(TcpBroadcast, "tcp_broadcast", &[])
+        // .add(TcpBroadcast, "tcp_broadcast", &[])
         .build();
 
     info!("dispatcher built, dispatching...");
 
     dispatcher.dispatch(&mut world.res);
+    world.maintain();
 
     info!("simulation shutting down...");
 }
