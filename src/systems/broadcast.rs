@@ -16,9 +16,13 @@ impl<'a> System <'a> for TcpBroadcast {
     fn run(&mut self, pos: Self::SystemData) {
         use specs::Join;
 
+        let addr = "127.0.0.1:8008";
+
         // bind a tcp listener to localhost:8080
-        let listener = TcpListener::bind("127.0.0.1:8008")
+        let listener = TcpListener::bind(addr)
             .expect("couldn't bind to address!");
+
+        info!("listening on {}!", addr);
 
         // we don't seem to need non-blocking execution
         // listener.set_nonblocking(true)

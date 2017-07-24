@@ -1,26 +1,36 @@
 extern crate specs;
 extern crate ggez;
-#[macro_use]
-extern crate serde_json;
+extern crate env_logger;
+#[macro_use] extern crate log;
+#[macro_use] extern crate serde_json;
+
 
 mod components;
 mod systems;
 mod survivor;
 mod zombie;
 
+
 use specs::{World, RunNow, DispatcherBuilder};
 
 use components::common::{Position, Velocity};
 use components::living::*;
+
 use systems::{Movement, Printer};
 use systems::broadcast::TcpBroadcast;
 
 
 fn main() {
+    env_logger::init().expect("env_logger initialization failed!");
+
+    info!("logging initialized, starting up...");
+
     let mut world = World::new();
     world.register::<Position>();
     world.register::<Velocity>();
     world.register::<Intelligence>();
+
+    info!("world created, components registered!");
 
     survivor::add_survivor(&mut world, None);
     zombie::add_zombie(&mut world, None);
@@ -31,5 +41,9 @@ fn main() {
         .add(TcpBroadcast, "tcp_broadcast", &[])
         .build();
 
+    info!("dispatcher built, dispatching...");
+
     dispatcher.dispatch(&mut world.res);
+
+    info!("simulation commencing...");
 }

@@ -50,4 +50,6 @@ pub fn add_survivor(world: &mut World, survivor: Option<SurvivorSpec>) {
         .with(spec.vel)
         .with(spec.intelligence)
         .build();
+
+    trace!("survivor entity created!");
 }

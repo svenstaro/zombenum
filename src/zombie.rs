@@ -60,4 +60,6 @@ pub fn add_zombie(world: &mut World, survivor: Option<ZombieSpec>) {
         .with(spec.vel)
         .with(spec.intelligence)
         .build();
+
+    trace!("zombie entity created!");
 }
