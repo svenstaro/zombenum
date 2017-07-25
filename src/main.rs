@@ -7,6 +7,7 @@ extern crate env_logger;
 
 mod components;
 mod systems;
+mod resources;
 mod survivor;
 mod zombie;
 
