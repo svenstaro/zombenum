@@ -2,24 +2,32 @@ extern crate specs;
 extern crate ggez;
 extern crate env_logger;
 extern crate rand;
-#[macro_use] extern crate log;
-#[macro_use] extern crate serde_json;
+#[macro_use]
+extern crate log;
+#[macro_use]
+extern crate serde_json;
 
-
-mod components;
-mod systems;
-mod resources;
-mod entities;
-mod util;
-
-
-use specs::{World, RunNow, DispatcherBuilder};
+use specs::{Component, DispatcherBuilder, ReadStorage, System, VecStorage, World, WriteStorage,
+            Fetch, Join};
 
 use components::common::*;
 use components::living::*;
 
 use systems::{Movement, Printer, ZombieSpawner};
 use systems::broadcast::TcpBroadcast;
+
+use std::time::{Duration, Instant};
+use std::thread::sleep;
+
+static TICKS_PER_SECOND: u64 = 60;
+
+struct DeltaTime(f32);
+
+mod components;
+mod systems;
+mod resources;
+mod entities;
+mod util;
 
 
 fn main() {
@@ -47,13 +55,17 @@ fn main() {
         // .add(TcpBroadcast, "tcp_broadcast", &[])
         .build();
 
-    info!("dispatcher built, dispatching...");
-
-    dispatcher.dispatch(&mut world.res);
-    world.maintain();
+    let mut running = true;
+    while running {
+        let now = Instant::now();
+        dispatcher.dispatch(&mut world.res);
+        world.maintain();
+        let max_tick_length = Duration::from_millis(1000 / TICKS_PER_SECOND);
+        let remaining = max_tick_length - now.elapsed();
+        if remaining > Duration::from_millis(0) {
+            sleep(remaining);
+        }
+    }
 
     info!("simulation shutting down...");
-
-    println!("Generating a name to see if it works...");
-    println!("{}", util::NameGenerator::gen_name());
 }
