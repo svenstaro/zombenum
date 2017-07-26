@@ -1,6 +1,7 @@
 extern crate specs;
 extern crate ggez;
 extern crate env_logger;
+extern crate rand;
 #[macro_use] extern crate log;
 #[macro_use] extern crate serde_json;
 
@@ -10,6 +11,7 @@ mod systems;
 mod resources;
 mod survivor;
 mod zombie;
+mod util;
 
 
 use specs::{World, RunNow, DispatcherBuilder};
@@ -49,4 +51,7 @@ fn main() {
     world.maintain();
 
     info!("simulation shutting down...");
+
+    println!("Generating a name to see if it works...");
+    println!("{}", util::NameGenerator::gen_name());
 }

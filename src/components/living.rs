@@ -3,6 +3,24 @@
 
 use specs::{Component, BTreeStorage};
 use components::common::Velocity;
+use util::NameGenerator;
+
+
+pub struct Name {
+    pub name: String,
+}
+
+impl Component for Name {
+    type Storage = BTreeStorage<Self>;
+}
+
+impl Default for Name {
+    fn default() -> Name {
+        Name {
+            name: NameGenerator::gen_name()
+        }
+    }
+}
 
 
 /// When Health is 0, something is dead.

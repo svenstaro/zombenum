@@ -5,6 +5,7 @@ use components::living::*;
 
 #[derive(Default)]
 pub struct SurvivorSpec {
+    name: Name,
     pos: Position,
     vel: Velocity,
     health: Health,
@@ -16,7 +17,8 @@ pub struct SurvivorSpec {
 }
 
 impl SurvivorSpec {
-    pub fn new(pos: Position,
+    pub fn new(name: Name,
+               pos: Position,
                vel: Velocity,
                health: Health,
                agility: Agility,
@@ -26,6 +28,7 @@ impl SurvivorSpec {
                thirst: Thirst
                ) -> SurvivorSpec {
         SurvivorSpec {
+            name: name,
             pos: pos,
             vel: vel,
             health: health,
