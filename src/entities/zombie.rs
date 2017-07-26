@@ -14,27 +14,6 @@ pub struct ZombieSpec {
     hunger: Hunger,
 }
 
-impl ZombieSpec {
-    pub fn new(pos: Position,
-               vel: Velocity,
-               health: Health,
-               agility: Agility,
-               intelligence: Intelligence,
-               nourishment: Nourishment,
-               hunger: Hunger
-               ) -> ZombieSpec {
-        ZombieSpec {
-            pos: pos,
-            vel: vel,
-            health: health,
-            agility: agility,
-            intelligence: intelligence,
-            nourishment: nourishment,
-            hunger: hunger,
-        }
-    }
-}
-
 impl Default for ZombieSpec {
     fn default() -> ZombieSpec {
         ZombieSpec {

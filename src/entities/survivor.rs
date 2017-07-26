@@ -18,31 +18,6 @@ pub struct SurvivorSpec {
     thirst: Thirst,
 }
 
-impl SurvivorSpec {
-    pub fn new(name: Name,
-               pos: Position,
-               vel: Velocity,
-               health: Health,
-               agility: Agility,
-               intelligence: Intelligence,
-               nourishment: Nourishment,
-               hunger: Hunger,
-               thirst: Thirst
-               ) -> SurvivorSpec {
-        SurvivorSpec {
-            name: name,
-            pos: pos,
-            vel: vel,
-            health: health,
-            agility: agility,
-            intelligence: intelligence,
-            nourishment: nourishment,
-            hunger: hunger,
-            thirst: thirst,
-        }
-    }
-}
-
 
 pub fn spawn_survivor(entity: Entity,
                      lazy: &LazyUpdate,
