@@ -2,7 +2,7 @@ extern crate rand;
 
 
 const FEMALE_NAMES: &'static [&str] = &[
-    "Lily", "Phillys", "Ruth", "Adrienne",
+    "Lily", "Phillys", "Agnes", "Adrienne",
     "Jennifer", "Amy", "Melissa", "Michelle",
     "Kimberly", "Lisa", "Angela", "Heather",
     "Stephanie", "Nicole", "Jessica", "Elizabeth",
