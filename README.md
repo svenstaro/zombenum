@@ -1,5 +1,7 @@
 # A zombie simulation game that plays itself
 
+[![Build Status](https://travis-ci.org/svenstaro/zombenum.svg?branch=master)](https://travis-ci.org/svenstaro/zombenum)
+
 ## Next steps
 * survivor and zombie entities
     * some components to go along
