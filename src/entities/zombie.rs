@@ -50,22 +50,6 @@ impl Default for ZombieSpec {
 }
 
 
-pub fn add_zombie(world: &mut World, zombie: Option<ZombieSpec>) {
-    let spec: ZombieSpec = match zombie {
-        None => Default::default(),
-        Some(s) => s,
-    };
-
-    world
-        .create_entity()
-        .with(spec.pos)
-        .with(spec.vel)
-        .with(spec.intelligence)
-        .build();
-
-    trace!("zombie entity created!");
-}
-
 pub fn spawn_zombie(entity: Entity,
                      lazy: &LazyUpdate,
                      zombie: Option<ZombieSpec>) {
@@ -76,5 +60,9 @@ pub fn spawn_zombie(entity: Entity,
 
     lazy.insert(entity, spec.pos);
     lazy.insert(entity, spec.vel);
+    lazy.insert(entity, spec.health);
+    lazy.insert(entity, spec.agility);
     lazy.insert(entity, spec.intelligence);
+    lazy.insert(entity, spec.nourishment);
+    lazy.insert(entity, spec.hunger);
 }
