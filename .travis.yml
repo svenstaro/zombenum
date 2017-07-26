@@ -10,8 +10,7 @@ matrix:
 
 before_install:
   - sudo apt-get update -qq
-  - sudo apt-get install make git -qq
-  - sudo apt-get install -y libasound2-dev
+  - sudo apt-get install libasound2-dev -qq
 
 install:
   - wget http://libsdl.org/release/SDL2-2.0.5.tar.gz
