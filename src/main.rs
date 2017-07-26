@@ -58,10 +58,17 @@ fn main() {
     let mut running = true;
     while running {
         let now = Instant::now();
+
         dispatcher.dispatch(&mut world.res);
         world.maintain();
+
         let max_tick_length = Duration::from_millis(1000 / TICKS_PER_SECOND);
-        let remaining = max_tick_length - now.elapsed();
+
+        let remaining = match max_tick_length.checked_sub(now.elapsed()) {
+            Some(duration) => duration,
+            None => continue,
+        };
+
         if remaining > Duration::from_millis(0) {
             sleep(remaining);
         }
