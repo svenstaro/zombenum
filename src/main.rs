@@ -9,8 +9,7 @@ extern crate rand;
 mod components;
 mod systems;
 mod resources;
-mod survivor;
-mod zombie;
+mod entities;
 mod util;
 
 
@@ -35,8 +34,8 @@ fn main() {
 
     info!("world created, components registered!");
 
-    survivor::add_survivor(&mut world, None);
-    zombie::add_zombie(&mut world, None);
+    entities::survivor::add_survivor(&mut world, None);
+    entities::zombie::add_zombie(&mut world, None);
 
     let mut dispatcher = DispatcherBuilder::new()
         .add(Movement, "movement", &[])

@@ -6,7 +6,7 @@ use specs::ReadStorage;
 use specs::WriteStorage;
 use components::common::{Position, Velocity};
 use components::living::Intelligence;
-use zombie;
+use entities::zombie;
 
 
 pub mod broadcast;
