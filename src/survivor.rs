@@ -1,4 +1,6 @@
 use specs::World;
+use specs::Entity;
+use specs::LazyUpdate;
 use components::common::*;
 use components::living::*;
 
@@ -41,18 +43,22 @@ impl SurvivorSpec {
     }
 }
 
-pub fn add_survivor(world: &mut World, survivor: Option<SurvivorSpec>) {
+
+pub fn spawn_survivor(entity: Entity,
+                     lazy: &LazyUpdate,
+                     survivor: Option<SurvivorSpec>) {
     let spec: SurvivorSpec = match survivor {
         None => Default::default(),
         Some(s) => s,
     };
 
-    world
-        .create_entity()
-        .with(spec.pos)
-        .with(spec.vel)
-        .with(spec.intelligence)
-        .build();
-
-    trace!("survivor entity created!");
+    lazy.insert(entity, spec.name);
+    lazy.insert(entity, spec.pos);
+    lazy.insert(entity, spec.vel);
+    lazy.insert(entity, spec.health);
+    lazy.insert(entity, spec.agility);
+    lazy.insert(entity, spec.intelligence);
+    lazy.insert(entity, spec.nourishment);
+    lazy.insert(entity, spec.hunger);
+    lazy.insert(entity, spec.thirst);
 }

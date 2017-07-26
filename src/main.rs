@@ -16,7 +16,7 @@ mod util;
 
 use specs::{World, RunNow, DispatcherBuilder};
 
-use components::common::{Position, Velocity};
+use components::common::*;
 use components::living::*;
 
 use systems::{Movement, Printer, ZombieSpawner};
@@ -29,14 +29,17 @@ fn main() {
     info!("logging initialized, starting up...");
 
     let mut world = World::new();
+    world.register::<Name>();
     world.register::<Position>();
     world.register::<Velocity>();
+    world.register::<Health>();
+    world.register::<Agility>();
     world.register::<Intelligence>();
+    world.register::<Nourishment>();
+    world.register::<Hunger>();
+    world.register::<Thirst>();
 
     info!("world created, components registered!");
-
-    survivor::add_survivor(&mut world, None);
-    zombie::add_zombie(&mut world, None);
 
     let mut dispatcher = DispatcherBuilder::new()
         .add(Movement, "movement", &[])

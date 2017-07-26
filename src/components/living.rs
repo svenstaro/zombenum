@@ -1,6 +1,7 @@
 //! Components that living entities can be assembled from.
 //! This includes 'the *living* dead', i.e. zombies.
 
+use std::fmt;
 use specs::{Component, BTreeStorage};
 use components::common::Velocity;
 use util::NameGenerator;
@@ -19,6 +20,12 @@ impl Default for Name {
         Name {
             name: NameGenerator::gen_name()
         }
+    }
+}
+
+impl fmt::Display for Name {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.name)
     }
 }
 
