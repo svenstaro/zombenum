@@ -37,16 +37,6 @@ pub struct Health {
     pub amount: u8,
 }
 
-impl Health {
-    pub fn apply_damage(&mut self, dmg: Damage) {
-        if dmg.damage > self.amount {
-            self.amount = 0;
-        } else {
-            self.amount -= dmg.damage;
-        }
-    }
-}
-
 impl Component for Health {
     type Storage = BTreeStorage<Self>;
 }

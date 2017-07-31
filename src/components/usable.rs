@@ -13,7 +13,9 @@ impl Component for Range {
 
 
 pub struct Accuracy {
-    pub value: f32,
+    pub melee: f32,
+    pub throw: f32,
+    pub shoot: f32,
 }
 
 impl Component for Accuracy {
@@ -39,7 +41,9 @@ impl Default for Durability {
 
 
 pub struct Damage {
-    pub damage: u8,
+    pub melee: u8,
+    pub throw: u8,
+    pub shoot: u8,
 }
 
 impl Component for Damage {

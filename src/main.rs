@@ -8,6 +8,13 @@ extern crate log;
 extern crate serde_json;
 
 
+mod components;
+mod systems;
+mod resources;
+mod entities;
+mod util;
+
+
 use std::time::{Duration, Instant};
 use std::thread::sleep;
 
@@ -23,19 +30,13 @@ use specs::Join;
 
 use components::common::*;
 use components::living::*;
+use components::usable::*;
 
 use systems::{Movement, Printer, Ticker};
-use systems::spawn::{SurvivorSpawner, ZombieSpawner};
+use systems::spawn::{SurvivorSpawner, ZombieSpawner, PistolSpawner};
 use systems::broadcast::TcpBroadcast;
 
 use resources::TickCounter;
-
-
-mod components;
-mod systems;
-mod resources;
-mod entities;
-mod util;
 
 
 static TICKS_PER_SECOND: u64 = 60;
@@ -50,15 +51,24 @@ fn main() {
 
     world.add_resource(TickCounter { ticks: 0 });
 
-    world.register::<Name>();
+    // common
     world.register::<Position>();
     world.register::<Velocity>();
+
+    // living
+    world.register::<Name>();
     world.register::<Health>();
     world.register::<Agility>();
     world.register::<Intelligence>();
     world.register::<Nourishment>();
     world.register::<Hunger>();
     world.register::<Thirst>();
+
+    // usable
+    world.register::<Range>();
+    world.register::<Accuracy>();
+    world.register::<Durability>();
+    world.register::<Damage>();
 
     info!("world created, components registered!");
 
@@ -67,6 +77,7 @@ fn main() {
         // .add(Printer, "printer", &[])
         .add(SurvivorSpawner, "survivor_spawner", &[])
         .add(ZombieSpawner, "zombie_spawner", &[])
+        .add(PistolSpawner, "pistol_spawner", &[])
         .add(Ticker, "ticker", &[])
         // .add(TcpBroadcast, "tcp_broadcast", &[])
         .build();
