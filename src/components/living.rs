@@ -4,11 +4,13 @@
 use std::fmt;
 use specs::{Component, BTreeStorage};
 use components::common::Velocity;
+use components::usable::Damage;
 use util::NameGenerator;
 
 
 pub struct Name {
-    pub name: String,
+    pub firstname: String,
+    pub lastname: String,
 }
 
 impl Component for Name {
@@ -17,15 +19,13 @@ impl Component for Name {
 
 impl Default for Name {
     fn default() -> Name {
-        Name {
-            name: NameGenerator::gen_name()
-        }
+        NameGenerator::gen_name()
     }
 }
 
 impl fmt::Display for Name {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.name)
+        write!(f, "{} {}", self.firstname, self.lastname)
     }
 }
 
@@ -35,6 +35,16 @@ impl fmt::Display for Name {
 #[derive(Debug)]
 pub struct Health {
     pub amount: u8,
+}
+
+impl Health {
+    pub fn apply_damage(&mut self, dmg: Damage) {
+        if dmg.damage > self.amount {
+            self.amount = 0;
+        } else {
+            self.amount -= dmg.damage;
+        }
+    }
 }
 
 impl Component for Health {

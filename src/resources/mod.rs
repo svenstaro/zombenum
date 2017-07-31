@@ -1,21 +1,17 @@
 #[derive(Debug)]
-pub struct DeltaTime {
-    ticks: u64,
+pub struct TickCounter {
+    pub ticks: u64,
 }
 
-impl DeltaTime {
-    pub fn new() -> DeltaTime {
-        DeltaTime { ticks: 0, }
+impl TickCounter {
+    pub fn new() -> TickCounter {
+        TickCounter { ticks: 0, }
     }
 
-    pub fn from<T: Into<u64>>(ticks: T) -> DeltaTime {
-        DeltaTime {
+    pub fn from<T: Into<u64>>(ticks: T) -> TickCounter {
+        TickCounter {
             ticks: ticks.into(),
         }
-    }
-
-    pub fn get(&self) -> u64 {
-        self.ticks
     }
 
     pub fn set<T: Into<u64>>(&mut self, ticks: T) {
@@ -27,7 +23,7 @@ impl DeltaTime {
             // TODO
             // this is just here so we notice when an overflow happens
             // and we haven't dealt with that yet.
-            panic!("DeltaTime overflow!");
+            panic!("TickCounter overflow!");
         }
 
         self.ticks += 1;

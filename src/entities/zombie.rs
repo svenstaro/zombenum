@@ -37,6 +37,8 @@ pub fn spawn_zombie(entity: Entity,
         Some(s) => s,
     };
 
+    trace!("Spawning zombie at {:?}...", spec.pos);
+
     lazy.insert(entity, spec.pos);
     lazy.insert(entity, spec.vel);
     lazy.insert(entity, spec.health);
@@ -44,4 +46,6 @@ pub fn spawn_zombie(entity: Entity,
     lazy.insert(entity, spec.intelligence);
     lazy.insert(entity, spec.nourishment);
     lazy.insert(entity, spec.hunger);
+
+    trace!("Spawning successful!");
 }

@@ -1,3 +1,6 @@
+extern crate rand;
+
+
 use specs::{Component, BTreeStorage};
 
 
@@ -20,11 +23,10 @@ impl Component for Position {
 
 impl Default for Position {
     fn default() -> Position {
-        // TODO: randomize?
         Position {
-            x: 0.0,
-            y: 0.0,
-            z: 0.0,
+            x: rand::random::<f32>() * 100.0,
+            y: rand::random::<f32>() * 100.0,
+            z: 0.0, // always spawn at ground level...?
         }
     }
 }

@@ -1,15 +1,20 @@
 use specs::Entities;
-use specs::Fetch;
+use specs::{Fetch, FetchMut};
 use specs::LazyUpdate;
 use specs::System;
 use specs::ReadStorage;
 use specs::WriteStorage;
+
 use components::common::{Position, Velocity};
 use components::living::Intelligence;
+
 use entities::zombie;
+
+use resources::TickCounter;
 
 
 pub mod broadcast;
+pub mod spawn;
 
 
 pub struct Movement;
@@ -50,14 +55,16 @@ impl<'a> System<'a> for Printer {
 }
 
 
-pub struct ZombieSpawner;
+pub struct Ticker;
 
-impl<'a> System<'a> for ZombieSpawner {
-    type SystemData = (Entities<'a>,
-                       Fetch<'a, LazyUpdate>);
+impl<'a> System<'a> for Ticker {
+    type SystemData = FetchMut<'a, TickCounter>;
 
-    fn run(&mut self, (ent, lazy): Self::SystemData) {
-        zombie::spawn_zombie(ent.create(), &lazy, None);
-        info!("zombie spawned!");
+    fn run(&mut self, data: Self::SystemData) {
+        let mut ticker = data;
+
+        ticker.increment();
+
+        trace!("{} ticks have passed.", ticker.ticks);
     }
 }

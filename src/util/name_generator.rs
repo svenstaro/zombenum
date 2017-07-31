@@ -1,8 +1,11 @@
 extern crate rand;
 
 
+use components::living::Name;
+
+
 const FEMALE_NAMES: &'static [&str] = &[
-    "Lily", "Phillys", "Agnes", "Adrienne",
+    "Lily", "Phyllis", "Agnes", "Adrienne",
     "Jennifer", "Amy", "Melissa", "Michelle",
     "Kimberly", "Lisa", "Angela", "Heather",
     "Stephanie", "Nicole", "Jessica", "Elizabeth",
@@ -52,7 +55,9 @@ const FEMALE_NAMES: &'static [&str] = &[
     "Robyn", "Brooke", "Kerri", "Sheri",
     "Becky", "Gloria", "Mindy", "Tracie",
     "Angie", "Kellie", "Claudia", "Ruth",
-    "Wanda", "Jeanette", "Cathy",
+    "Wanda", "Jeanette", "Cathy", "Cecilia",
+    "Clarice", "Hope", "Ronda", "Daisy",
+    "Pam",
 ];
 
 const MALE_NAMES: &'static [&str] = &[
@@ -106,7 +111,31 @@ const MALE_NAMES: &'static [&str] = &[
     "Stanley", "Melvin", "Howard", "Mitchell",
     "Duane", "Trevor", "Jeff", "Geoffrey",
     "Hector", "Terrence", "Terrance", "Oscar",
-    "Jaime", "Clifford", "Harry",
+    "Jaime", "Clifford", "Harry", "Sven",
+    "Herbert", "Bender", "Clark", "Parker",
+    "Bart", "Bryce", "Simon", "Art",
+    "Jim", "Wallace", "Rick",
+];
+
+
+const LAST_NAMES: &'static  [&str] = &[
+    "Smith", "Johnson", "Williams", "Jones",
+    "Brown", "Davis", "Miller", "Wilson",
+    "Moore", "Taylor", "Anderson", "Thomas",
+    "Jackson", "White", "Harris", "Martin",
+    "Thompson", "Garcia", "Martinez", "Robinson",
+    "Clarke", "Rodriguez", "Lewis", "Lee",
+    "Walker", "Hall", "Allen", "Young",
+    "Hernandez", "King", "Haase", "Wick",
+    "Woodhouse", "Wick", "Svensson", "Herbert",
+    "Sherman", "Herrman", "Burton", "Simpson",
+    "Fry", "Farnsworth", "Baggins", "Bronson",
+    "Branson", "Kent", "Wayne", "Stark",
+    "Parker", "Creutzfeldt", "Jacobs", "Berg",
+    "Kerbin", "Rice", "Simon", "Garfunkel",
+    "Starling", "Rousey", "Vance", "Dunder",
+    "Mifflin", "California", "Wallace", "Wong",
+    "Cheese", "Sanchez",
 ];
 
 
@@ -125,11 +154,23 @@ impl NameGenerator {
         String::from(MALE_NAMES[idx])
     }
 
-    pub fn gen_name() -> String {
+    pub fn gen_last() -> String {
+        let idx = rand::random::<usize>() % LAST_NAMES.len();
+
+        String::from(LAST_NAMES[idx])
+    }
+
+    pub fn gen_name() -> Name {
         if rand::random::<bool>() {
-            Self::gen_female()
+            Name {
+                firstname: Self::gen_female(),
+                lastname: Self::gen_last(),
+            }
         } else {
-            Self::gen_male()
+            Name {
+                firstname: Self::gen_male(),
+                lastname: Self::gen_last(),
+            }
         }
     }
 }

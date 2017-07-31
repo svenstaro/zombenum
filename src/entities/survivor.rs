@@ -27,6 +27,8 @@ pub fn spawn_survivor(entity: Entity,
         Some(s) => s,
     };
 
+    trace!("Spawning survivor '{}' at {:?}...", spec.name, spec.pos);
+
     lazy.insert(entity, spec.name);
     lazy.insert(entity, spec.pos);
     lazy.insert(entity, spec.vel);
@@ -36,4 +38,6 @@ pub fn spawn_survivor(entity: Entity,
     lazy.insert(entity, spec.nourishment);
     lazy.insert(entity, spec.hunger);
     lazy.insert(entity, spec.thirst);
+
+    trace!("Spawning successful!");
 }

@@ -7,21 +7,29 @@ extern crate log;
 #[macro_use]
 extern crate serde_json;
 
-use specs::{Component, DispatcherBuilder, ReadStorage, System, VecStorage, World, WriteStorage,
-            Fetch, Join};
-
-use components::common::*;
-use components::living::*;
-
-use systems::{Movement, Printer, ZombieSpawner};
-use systems::broadcast::TcpBroadcast;
 
 use std::time::{Duration, Instant};
 use std::thread::sleep;
 
-static TICKS_PER_SECOND: u64 = 60;
+use specs::Component;
+use specs::DispatcherBuilder;
+use specs::ReadStorage;
+use specs::System;
+use specs::VecStorage;
+use specs::World;
+use specs::WriteStorage;
+use specs::Fetch;
+use specs::Join;
 
-struct DeltaTime(f32);
+use components::common::*;
+use components::living::*;
+
+use systems::{Movement, Printer, Ticker};
+use systems::spawn::{SurvivorSpawner, ZombieSpawner};
+use systems::broadcast::TcpBroadcast;
+
+use resources::TickCounter;
+
 
 mod components;
 mod systems;
@@ -30,12 +38,18 @@ mod entities;
 mod util;
 
 
+static TICKS_PER_SECOND: u64 = 60;
+
+
 fn main() {
     env_logger::init().expect("env_logger initialization failed!");
 
     info!("logging initialized, starting up...");
 
     let mut world = World::new();
+
+    world.add_resource(TickCounter { ticks: 0 });
+
     world.register::<Name>();
     world.register::<Position>();
     world.register::<Velocity>();
@@ -50,8 +64,10 @@ fn main() {
 
     let mut dispatcher = DispatcherBuilder::new()
         .add(Movement, "movement", &[])
-        .add(Printer, "printer", &[])
+        // .add(Printer, "printer", &[])
+        .add(SurvivorSpawner, "survivor_spawner", &[])
         .add(ZombieSpawner, "zombie_spawner", &[])
+        .add(Ticker, "ticker", &[])
         // .add(TcpBroadcast, "tcp_broadcast", &[])
         .build();
 
