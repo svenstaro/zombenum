@@ -7,4 +7,4 @@ edition = "2018"
 [dependencies]
 zombenum-shared = { path = "../shared" }
 macroquad = "0.3.0-alpha.14"
-naia-client = "0.4"
+naia-client-socket = "0.5"

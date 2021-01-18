@@ -6,3 +6,5 @@ edition = "2018"
 
 [dependencies]
 legion = "0.3"
+naia-socket-shared = "0.4"
+anyhow = "1"
