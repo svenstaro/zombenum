@@ -6,7 +6,7 @@ edition = "2018"
 
 [dependencies]
 zombenum-shared = { path = "../shared" }
-naia-server-socket = { version = "0.4", features = ["use-udp"] }
+laminar = "0.4"
 simplelog = "0.9"
 log = "0.4"
 smol = { version = "1" }

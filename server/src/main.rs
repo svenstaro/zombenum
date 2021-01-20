@@ -1,47 +1,54 @@
 use anyhow::Result;
-use log::{LevelFilter, info};
+use laminar::{Packet, Socket, SocketEvent};
+use log::{info, LevelFilter};
 use simplelog::{Config, TermLogger, TerminalMode};
-use std::net::SocketAddr;
-use naia_server_socket::{find_my_ip_address, LinkConditionerConfig, Packet, ServerSocket};
+use std::thread;
 
-const SERVER_PORT: u16 = 14191;
-const PING_MSG: &str = "ping";
-const PONG_MSG: &str = "pong";
+const SERVER: &str = "0.0.0.0:14191";
 
 fn main() -> Result<()> {
     TermLogger::init(LevelFilter::Info, Config::default(), TerminalMode::Mixed)?;
 
     info!("Starting server");
-    smol::block_on(async {
-        let current_ip_address = "0.0.0.0".parse()?; //find_my_ip_address().expect("can't find ip address");
-        let current_socket_address = SocketAddr::new(current_ip_address, SERVER_PORT);
 
-        let mut server_socket = ServerSocket::listen(current_socket_address)
-            .await
-            .with_link_conditioner(&LinkConditionerConfig::good_condition());
+    let mut socket = Socket::bind(SERVER)?;
+    let (sender, receiver) = (socket.get_packet_sender(), socket.get_event_receiver());
+    let _thread = thread::spawn(move || socket.start_polling());
 
-        let mut sender = server_socket.get_sender();
+    loop {
+        if let Ok(event) = receiver.recv() {
+            match event {
+                SocketEvent::Packet(packet) => {
+                    let msg = packet.payload();
 
-        loop {
-            match server_socket.receive().await {
-                Ok(packet) => {
-                    let address = packet.address();
-                    let message = String::from_utf8_lossy(packet.payload());
-                    info!("Server recv <- {}: {}", address, message);
-
-                    if message.eq(PING_MSG) {
-                        let to_client_message: String = PONG_MSG.to_string();
-                        info!("Server send -> {}: {}", address, to_client_message);
-                        sender
-                            .send(Packet::new(address, to_client_message.into_bytes()))
-                            .await
-                            .expect("send error");
+                    if msg == b"Bye!" {
+                        break;
                     }
+
+                    let msg = String::from_utf8_lossy(msg);
+                    let ip = packet.addr().ip();
+
+                    println!("Received {:?} from {:?}", msg, ip);
+
+                    sender
+                        .send(Packet::reliable_unordered(
+                            packet.addr(),
+                            "Copy that!".as_bytes().to_vec(),
+                        ))
+                        .expect("This should send");
                 }
-                Err(error) => {
-                    info!("Server Error: {}", error);
+                SocketEvent::Connect(address) => {
+                    info!("Client connected: {}", address);
+                }
+                SocketEvent::Disconnect(address) => {
+                    info!("Client disconnected: {}", address);
+                }
+                SocketEvent::Timeout(address) => {
+                    info!("Client timed out: {}", address);
                 }
             }
         }
-    })
+    }
+
+    Ok(())
 }
