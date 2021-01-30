@@ -9,5 +9,6 @@ zombenum-shared = { path = "../shared" }
 macroquad = "0.3.0-alpha.14"
 laminar = "0.4"
 simplelog = "0.9"
-log = " 0.4"
+log = "0.4"
 anyhow = "1"
+legion= "0.3"

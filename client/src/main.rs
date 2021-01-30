@@ -1,9 +1,10 @@
-use anyhow::{Context, Result};
+use anyhow::Result;
 use laminar::{Packet, Socket, SocketEvent};
+use legion::*;
 use log::{info, LevelFilter};
 use macroquad::prelude::*;
 use simplelog::{Config, TermLogger, TerminalMode};
-use std::{net::SocketAddr, thread, time::Instant};
+use std::thread;
 
 const SERVER: &str = "127.0.0.1:14191";
 
