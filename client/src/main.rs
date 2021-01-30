@@ -50,6 +50,13 @@ async fn run() -> Result<()> {
             sender.send(Packet::reliable_unordered(server, "lol".into()))?;
         }
 
+        let mut move_vec = glam::f32::Vec2::default();
+        if is_key_pressed(KeyCode::W) {
+            move_vec += glam::f32::vec2(0.0, 1.0)
+        }
+
+        sender.send(Packet::reliable_unordered(server, "lol".into()))?;
+
         if let Ok(event) = receiver.try_recv() {
             match event {
                 SocketEvent::Packet(packet) => {
