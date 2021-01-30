@@ -1,10 +1,13 @@
+use std::thread;
+
 use anyhow::Result;
 use laminar::{Packet, Socket, SocketEvent};
 use legion::*;
 use log::{info, LevelFilter};
 use macroquad::prelude::*;
 use simplelog::{Config, TermLogger, TerminalMode};
-use std::thread;
+
+use zombenum_shared::*;
 
 const SERVER: &str = "127.0.0.1:14191";
 
@@ -24,6 +27,7 @@ async fn run() -> Result<()> {
     TermLogger::init(LevelFilter::Info, Config::default(), TerminalMode::Mixed)?;
 
     info!("Starting client");
+    let world = World::default();
 
     let mut socket = Socket::bind_any()?;
     info!("Bound on {}", socket.local_addr()?.to_string());
@@ -33,6 +37,9 @@ async fn run() -> Result<()> {
 
     info!("Server is {}", SERVER);
     let server = SERVER.parse()?;
+
+    sender.send(Packet::reliable_unordered(server, "new_player".into()))?;
+    let state = receiver.recv();
 
     loop {
         if is_key_down(KeyCode::Escape) {

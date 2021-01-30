@@ -1,5 +1,6 @@
 use anyhow::Result;
 use laminar::{Packet, Socket, SocketEvent};
+use legion::*;
 use log::{info, LevelFilter};
 use simplelog::{Config, TermLogger, TerminalMode};
 use std::thread;
@@ -8,6 +9,8 @@ const SERVER: &str = "0.0.0.0:14191";
 
 fn main() -> Result<()> {
     TermLogger::init(LevelFilter::Info, Config::default(), TerminalMode::Mixed)?;
+
+    let world = World::default();
 
     info!("Starting server");
 
@@ -27,6 +30,13 @@ fn main() -> Result<()> {
 
                     let msg = String::from_utf8_lossy(msg);
                     let ip = packet.addr().ip();
+
+                    if msg == "new_player" {
+                        //let serialized = bincode::serialize(
+                        //    &world.as_serializable(component::<Position>(), &registry),
+                        //)
+                        //.unwrap();
+                    }
 
                     println!("Received {:?} from {:?}", msg, ip);
 
