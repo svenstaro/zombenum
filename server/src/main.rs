@@ -13,6 +13,7 @@ fn main() -> Result<()> {
     TermLogger::init(LevelFilter::Info, Config::default(), TerminalMode::Mixed)?;
 
     let mut world = World::default();
+    let registry = get_registry();
 
     info!("Starting server");
 
@@ -36,19 +37,11 @@ fn main() -> Result<()> {
                     if msg == "new_player" {
                         world.push((Position { x: 0.0, y: 0.0 }, Player { id: 0 }));
 
-                        let registry = get_registry();
                         let components =
                             bincode::serialize(&world.as_serializable(any(), &registry))?;
                         sender.send(Packet::reliable_ordered(
                             packet.addr(),
                             components,
-                            Some(0u8),
-                        ))?;
-
-                        let final_message = "done".as_bytes().to_vec();
-                        sender.send(Packet::reliable_ordered(
-                            packet.addr(),
-                            final_message,
                             Some(0u8),
                         ))?;
                     }
