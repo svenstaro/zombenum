@@ -5,12 +5,14 @@ use log::{info, LevelFilter};
 use simplelog::{Config, TermLogger, TerminalMode};
 use std::thread;
 
+use zombenum_shared::*;
+
 const SERVER: &str = "0.0.0.0:14191";
 
 fn main() -> Result<()> {
     TermLogger::init(LevelFilter::Info, Config::default(), TerminalMode::Mixed)?;
 
-    let world = World::default();
+    let mut world = World::default();
 
     info!("Starting server");
 
@@ -32,10 +34,23 @@ fn main() -> Result<()> {
                     let ip = packet.addr().ip();
 
                     if msg == "new_player" {
-                        //let serialized = bincode::serialize(
-                        //    &world.as_serializable(component::<Position>(), &registry),
-                        //)
-                        //.unwrap();
+                        world.push((Position { x: 0.0, y: 0.0 }, Player { id: 0 }));
+
+                        let registry = get_registry();
+                        let components =
+                            bincode::serialize(&world.as_serializable(any(), &registry))?;
+                        sender.send(Packet::reliable_ordered(
+                            packet.addr(),
+                            components,
+                            Some(0u8),
+                        ))?;
+
+                        let final_message = "done".as_bytes().to_vec();
+                        sender.send(Packet::reliable_ordered(
+                            packet.addr(),
+                            final_message,
+                            Some(0u8),
+                        ))?;
                     }
 
                     println!("Received {:?} from {:?}", msg, ip);

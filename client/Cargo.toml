@@ -11,5 +11,8 @@ laminar = "0.4"
 simplelog = "0.9"
 log = "0.4"
 anyhow = "1"
-legion = "0.3"
 glam = { version = "0.12", features = ["serde"] }
+legion= "0.3"
+
+serde = "1"
+bincode = "1"

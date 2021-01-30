@@ -1,10 +1,12 @@
 use std::thread;
 
 use anyhow::Result;
+use bincode::DefaultOptions;
 use laminar::{Packet, Socket, SocketEvent};
 use legion::*;
 use log::{info, LevelFilter};
 use macroquad::prelude::*;
+use serde::de::DeserializeSeed;
 use simplelog::{Config, TermLogger, TerminalMode};
 
 use zombenum_shared::*;
@@ -27,7 +29,6 @@ async fn run() -> Result<()> {
     TermLogger::init(LevelFilter::Info, Config::default(), TerminalMode::Mixed)?;
 
     info!("Starting client");
-    let world = World::default();
 
     let mut socket = Socket::bind_any()?;
     info!("Bound on {}", socket.local_addr()?.to_string());
@@ -38,8 +39,27 @@ async fn run() -> Result<()> {
     info!("Server is {}", SERVER);
     let server = SERVER.parse()?;
 
+    info!("Initial state transfer");
+    let mut world = World::default();
+    let registry = get_registry();
+    let deserializer = registry.as_deserialize_into_world(&mut world);
     sender.send(Packet::reliable_unordered(server, "new_player".into()))?;
-    let state = receiver.recv();
+    loop {
+        if let Ok(event) = receiver.recv() {
+            match event {
+                SocketEvent::Packet(packet) => {
+                    let payload = packet.payload();
+
+                    deserializer.deserialize(&mut bincode::Deserializer::with_reader(
+                        payload,
+                        DefaultOptions::new(),
+                    ))?;
+                    break;
+                }
+                _ => continue,
+            }
+        }
+    }
 
     loop {
         if is_key_down(KeyCode::Escape) {

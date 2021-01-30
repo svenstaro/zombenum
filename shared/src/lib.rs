@@ -1,23 +1,32 @@
-use serde::{Serialize, Deserialize};
 use glam::f32::Vec2;
+use legion::Registry;
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub enum PlayerInputEvent {
-    Move(Vec2)
+    Move(Vec2),
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub enum NetworkMessage {
-    PlayerInputEvent(PlayerInputEvent)
+    PlayerInputEvent(PlayerInputEvent),
 }
 
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq, Deserialize, Serialize)]
 pub struct Position {
-    x: f32,
-    y: f32,
+    pub x: f32,
+    pub y: f32,
 }
 
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq, Deserialize, Serialize)]
 pub struct Player {
-    id: u16,
+    pub id: u16,
+}
+
+pub fn get_registry() -> Registry<String> {
+    let mut registry = Registry::<String>::default();
+    registry.register::<Position>("position".to_string());
+    registry.register::<Player>("player".to_string());
+
+    registry
 }
